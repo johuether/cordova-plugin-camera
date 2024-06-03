@@ -1097,7 +1097,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
         }
         try {
             String mimeType = FileHelper.getMimeType(imageUrl.toString(), cordova);
-            if (JPEG_MIME_TYPE.equalsIgnoreCase(mimeType)) {
+            if (JPEG_MIME_TYPE.equalsIgnoreCase(mimeType) || HEIC_MIME_TYPE.equalsIgnoreCase(mimeType)) {
                 //  ExifInterface doesn't like the file:// prefix
                 String filePath = galleryUri.toString().replace("file://", "");
                 // read exifData of source
