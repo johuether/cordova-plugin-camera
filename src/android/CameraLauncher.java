@@ -205,7 +205,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                 else if ((this.srcType == PHOTOLIBRARY) || (this.srcType == SAVEDPHOTOALBUM)) {
                     // FIXME: Stop always requesting the permission
                     String[] permissions = getPermissions(true, mediaType);
-                    if(!hasPermissions(permissions) && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    if(!hasPermissions(permissions)) {
                         PermissionHelper.requestPermissions(this, SAVE_TO_ALBUM_SEC, permissions);
                     } else {
                         this.getImage(this.srcType, destType);
@@ -456,11 +456,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                 croppedUri = Uri.fromFile(photo);
                 intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, croppedUri);
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-                } else {
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                }
+                intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
             }
         } else if (this.mediaType == VIDEO) {
@@ -1530,8 +1526,9 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             } else {
                 return new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             }
+        } else {
+            return new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION};
         }
-        return new String[0];
     }
 
     private boolean hasPermissions(String[] permissions) {
